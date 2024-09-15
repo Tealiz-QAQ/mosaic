@@ -1,0 +1,257 @@
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+/* Allow percentage-based heights in the application */
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  /* -webkit-font-smoothing: antialiased; */
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+  -webkit-user-drag: none;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+/* @media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+} */
+
+/* Create a root stacking context */
+#__next {
+  isolation: isolate;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Customize */
+
+*,
+*::before,
+*::after {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-optical-sizing: auto;
+}
+
+input[type="text"][disabled],
+input[type="text"][disabled]:hover,
+input[type="text"][disabled]:focus {
+  color: #9aa0a6;
+  -webkit-text-fill-color: #9aa0a6;
+  opacity: 1;
+  /* required on iOS */
+}
+
+input[type="text"][disabled]::placeholder {
+  color: #9aa0a6;
+  -webkit-text-fill-color: #9aa0a6;
+}
+
+.input-modal-select-token,
+.input-modal-select-token:hover,
+.input-modal-select-token:focus,
+.input-modal-select-token:active {
+  background: #101010 !important;
+  border-radius: 4px;
+  font-size: 16px;
+
+  > div > div {
+    padding: 0 12px;
+    @media only screen and (max-width: 639px) {
+      padding: 0 8px;
+    }
+  }
+
+  input,
+  input:hover,
+  input:focus,
+  input:active {
+    background-color: #101010 !important;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+
+  div,
+  div:hover,
+  div:focus,
+  div:active {
+    background-color: #101010 !important;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+}
+
+[id^="tooltip"] {
+  z-index: 999;
+}
+
+.z-toast {
+  padding: 0;
+  top: 130px;
+  right: 40px;
+  @media only screen and (max-width: 1023px) {
+    right: 10px;
+  }
+  @media only screen and (max-width: 639px) {
+    top: 0;
+    right: 0;
+  }
+}
+
+.z-toast-body {
+  padding: 0;
+}
+
+.z-toast-progress-success {
+  background: #18cf6a;
+}
+
+.z-toast-progress-failed {
+  background: #f44646;
+}
+
+* {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  ::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+}
+
+/* Config razor wallet */
+.wkit-button {
+  background: #faca20;
+  color: #42444b;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+
+  &:hover,
+  &:active,
+  &:focus {
+    background: #faca20;
+    color: #42444b;
+    opacity: 0.9;
+  }
+}
+
+/* Config razor wallet */
+
+// Shaking animation
+@keyframes shake {
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+.shake {
+  animation-name: shake;
+  animation-duration: 0.25s;
+  animation-iteration-count: infinite;
+}

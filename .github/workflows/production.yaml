@@ -1,0 +1,101 @@
+name: 'Deploy To Production'
+
+permissions: write-all
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Deploy To Production'
+        type: string
+        required: true
+
+env:
+  SERVICE: mosaic-interface
+  IMAGE_REPOSITORY: asia.gcr.io/develop-430303/mosaic/interface
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: prepare
+        id: prepare
+        env:
+          INPUT_TAG: ${{ github.event.inputs.version }}
+        run: |
+          #!/bin/bash
+
+          if [[ "$IMAGE_REPOSITORY" == "" ]]; then
+            echo "IMAGE_REPOSITORY must be define."
+            exit 1
+          fi
+
+          TAG=${INPUT_TAG#v}
+          echo "::set-output name=TAG::v${TAG}"
+          echo "::set-output name=IMAGE_TAG::${IMAGE_REPOSITORY}:release-v${TAG}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Gcloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCR_CREDENTIALS }}"
+
+      - name: Setup Gcloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure docker
+        run: gcloud auth configure-docker
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-${{ env.SERVICE }}-buildx
+
+      - name: Docker build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.prepare.outputs.IMAGE_TAG }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+
+      - name: Move Docker cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Create tag
+        env:
+          TAG: ${{ steps.prepare.outputs.TAG }}
+        run: |
+          git tag -d "$TAG" 2> /dev/null || echo "Release tag '$TAG' does NOT exist"
+          git tag --annotate --message "Mosaic Interface $TAG" "$TAG"
+          git push origin "refs/tags/$TAG"
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.prepare.outputs.TAG }}
+          prerelease: false
+          name: "Mosaic Interface ${{ steps.prepare.outputs.TAG }}"
